@@ -29,8 +29,10 @@ jobs:
       - name: Install dependencies
         working-directory: sem5pi/SPA
         run: npm install
-      - name: SonarQube Scan
+      - name: SonarQube Scan (JS)
         uses: SonarSource/sonarqube-scan-action@v5
+        with:
+          project-root: sem5pi/SPA  # Specify JS directory
         env:
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
 
@@ -54,6 +56,9 @@ jobs:
       - name: Install SonarScanner tool
         run: |
           dotnet tool install --global dotnet-sonarscanner
+      - name: Remove sonar-project.properties for .NET analysis
+        run: |
+          rm -f sonar-project.properties
       - name: Run SonarScanner analysis for .NET
         run: |
           dotnet sonarscanner begin /k:"ruivieira03_Projeto-Estagio-Teste" /o:"ruivieira03" /d:sonar.token="${{ secrets.SONAR_TOKEN }}" /d:sonar.host.url="https://sonarcloud.io"
