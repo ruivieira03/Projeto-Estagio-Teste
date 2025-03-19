@@ -10,7 +10,7 @@ on:
 jobs:
   build:
     name: Build and analyze
-    runs-on: ubuntu-latest  # Changed to Linux for macOS compatibility
+    runs-on: ubuntu-latest  # Changed for macOS compatibility
 
     steps:
       - name: Set up JDK 17
@@ -24,16 +24,22 @@ jobs:
         with:
           fetch-depth: 0  # Required for SonarQube PR analysis
 
+      - name: Debug - List Repository Files
+        run: ls -R
+
       - name: Install .NET and SonarScanner
         run: |
           dotnet tool install --global dotnet-sonarscanner  # Install scanner globally
-          echo "$HOME/.dotnet/tools" >> $GITHUB_PATH  # Ensure global tools are in PATH
+          echo "$HOME/.dotnet/tools" >> $GITHUB_PATH  # Add tools to PATH
 
-      - name: Build and analyze with SonarQube
+      - name: Move to Project Directory
+        run: |
+          cd $(find . -type d -name "mdr" | head -n 1) || exit 1  # Dynamically find "mdr"
+
+      - name: Build and Analyze with SonarQube
         env:
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
         run: |
-          cd sem5pi/mdr  # Move to the correct directory
           dotnet-sonarscanner begin /k:"ruivieira03_Projeto-Estagio-Teste" /o:"ruivieira03" /d:sonar.token="${{ secrets.SONAR_TOKEN }}" /d:sonar.host.url="https://sonarcloud.io"
           dotnet build  # Build the project
           dotnet-sonarscanner end /d:sonar.token="${{ secrets.SONAR_TOKEN }}"
