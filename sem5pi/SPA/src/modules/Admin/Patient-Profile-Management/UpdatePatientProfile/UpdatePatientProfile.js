@@ -2,7 +2,6 @@ import React, { useState } from 'react';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 import { API_BASE_URL } from '../../../../config'; // Import API_BASE_URL
-import './UpdatePatientProfile.test';
 
 const UpdatePatientProfile = ({ patient, authToken, onUpdateSuccess }) => {
     const [loading, setLoading] = useState(false);
