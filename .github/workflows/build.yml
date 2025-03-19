@@ -27,7 +27,7 @@ jobs:
 
   build:
     name: Build and analyze
-    runs-on: windows-latest
+    runs-on: macos-latest
     steps:
       - name: Set up JDK 17
         uses: actions/setup-java@v4
@@ -37,31 +37,15 @@ jobs:
       - uses: actions/checkout@v4
         with:
           fetch-depth: 0
-      - name: Cache SonarQube Cloud packages
-        uses: actions/cache@v4
+      - name: Install .NET SDK
+        uses: actions/setup-dotnet@v2
         with:
-          path: ~\sonar\cache
-          key: ${{ runner.os }}-sonar
-          restore-keys: ${{ runner.os }}-sonar
-      - name: Cache SonarQube Cloud scanner
-        id: cache-sonar-scanner
-        uses: actions/cache@v4
-        with:
-          path: .\.sonar\scanner
-          key: ${{ runner.os }}-sonar-scanner
-          restore-keys: ${{ runner.os }}-sonar-scanner
-      - name: Install SonarQube Cloud scanner
-        if: steps.cache-sonar-scanner.outputs.cache-hit != 'true'
-        shell: bash
+          dotnet-version: '7.x'
+      - name: Install SonarScanner tool
         run: |
-          mkdir -p ./.sonar/scanner
-          dotnet tool update dotnet-sonarscanner --tool-path ./.sonar/scanner
-      - name: Build and analyze
-        working-directory: sem5pi/MDR
-        env:
-          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
-        shell: bash
+          dotnet tool install --global dotnet-sonarscanner
+      - name: Run SonarScanner analysis for .NET
         run: |
-          ./.sonar/scanner/dotnet-sonarscanner begin /k:"ruivieira03_Projeto-Estagio-Teste" /o:"ruivieira03" /d:sonar.token="${{ secrets.SONAR_TOKEN }}" /d:sonar.host.url="https://sonarcloud.io"
-          dotnet build
-          ./.sonar/scanner/dotnet-sonarscanner end /d:sonar.token="${{ secrets.SONAR_TOKEN }}"
+          dotnet sonarscanner begin /k:"ruivieira03_Projeto-Estagio-Teste" /o:"ruivieira03" /d:sonar.token="${{ secrets.SONAR_TOKEN }}" /d:sonar.host.url="https://sonarcloud.io"
+          dotnet build sem5pi/MDR/sem5pi-24-25-g034.sln
+          dotnet sonarscanner end /d:sonar.token="${{ secrets.SONAR_TOKEN }}"
