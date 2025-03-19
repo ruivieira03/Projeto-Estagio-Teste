@@ -29,6 +29,9 @@ jobs:
       - name: Install dependencies
         working-directory: sem5pi/SPA
         run: npm install
+      - name: Debug installed packages
+        working-directory: sem5pi/SPA
+        run: ls -la node_modules/react-router-dom || echo "react-router-dom is missing!"
       - name: Run tests with coverage
         working-directory: sem5pi/SPA
         run: npm test -- --coverage
@@ -63,11 +66,21 @@ jobs:
       - name: Remove sonar-project.properties for .NET analysis
         run: |
           rm -f sonar-project.properties  # Ensure no sonar-project.properties file exists
-      - name: Run tests with coverage
+      - name: Run Tests with Coverage
+        working-directory: sem5pi/MDR
         run: |
-          dotnet test sem5pi/MDR/sem5pi-24-25-g034.sln --collect:"XPlat Code Coverage"  # Run tests and collect coverage
-      - name: Run SonarScanner analysis for .NET
+          dotnet test --collect:"XPlat Code Coverage" --logger trx --results-directory TestResults
+
+      - name: Convert Coverage to Cobertura Format
+        working-directory: sem5pi/MDR
         run: |
-          dotnet sonarscanner begin /k:"ruivieira03_Projeto-Estagio-Teste" /o:"ruivieira03" /d:sonar.token="${{ secrets.SONAR_TOKEN }}" /d:sonar.host.url="https://sonarcloud.io" /d:sonar.cs.vstest.reportsPaths="**/TestResults/*.xml" /d:sonar.coverageReportPaths="**/coverage.cobertura.xml"
-          dotnet build sem5pi/MDR/sem5pi-24-25-g034.sln
+          dotnet tool install --global coverlet.console
+          dotnet tool install --global dotnet-reportgenerator-globaltool
+          reportgenerator -reports:"TestResults/**/coverage.cobertura.xml" -targetdir:"TestResults/CoverageReport" -reporttypes:Cobertura
+
+      - name: Run SonarScanner Analysis
+        working-directory: sem5pi/MDR
+        run: |
+          dotnet sonarscanner begin /k:"ruivieira03_Projeto-Estagio-Teste" /o:"ruivieira03" /d:sonar.token="${{ secrets.SONAR_TOKEN }}" /d:sonar.host.url="https://sonarcloud.io" /d:sonar.coverageReportPaths="TestResults/CoverageReport/Cobertura.xml"
+          dotnet build sem5pi-24-25-g034.sln
           dotnet sonarscanner end /d:sonar.token="${{ secrets.SONAR_TOKEN }}"
