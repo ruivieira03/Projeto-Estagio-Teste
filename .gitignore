@@ -22,3 +22,6 @@ obj/
 *.sqlite
 appsettings*.json
 secrets.json
+
+# SonarQube properties file
+sonar-project.properties
