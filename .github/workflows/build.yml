@@ -4,35 +4,12 @@ on:
   push:
     branches:
       - main
-      - dotnet
-      - js
   pull_request:
     types: [opened, synchronize, reopened]
     branches:
       - main
-      - dotnet
-      - js
 
 jobs:
-  sonarqube-js:
-    name: SonarQube JS Analysis
-    runs-on: ubuntu-latest
-    if: github.ref == 'refs/heads/js'  # Only run this job on the js branch
-    steps:
-      - uses: actions/checkout@v4
-        with:
-          fetch-depth: 0  # Shallow clones should be disabled for a better relevancy of analysis
-      - name: Set up Node.js
-        uses: actions/setup-node@v3
-        with:
-          node-version: '16'
-      - name: Install dependencies
-        working-directory: sem5pi/SPA
-        run: npm install
-      - name: SonarQube Scan
-        uses: SonarSource/sonarqube-scan-action@v5
-        env:
-          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
 
   sonarqube-dotnet:
     name: SonarQube .NET Analysis
