@@ -14,7 +14,6 @@ jobs:
   sonarqube-dotnet:
     name: SonarQube .NET Analysis
     runs-on: macos-latest
-    if: github.ref == 'refs/heads/dotnet'  # Only run this job on the dotnet branch
     steps:
       - name: Set up JDK 17
         uses: actions/setup-java@v4
