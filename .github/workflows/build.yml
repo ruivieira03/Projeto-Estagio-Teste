@@ -31,7 +31,7 @@ jobs:
         run: npm install
       - name: Run tests with coverage
         working-directory: sem5pi/SPA
-        run: npm run test -- --coverage
+        run: npm test -- --coverage
       - name: SonarQube Scan (JS)
         uses: SonarSource/sonarqube-scan-action@v5
         with:
@@ -65,7 +65,7 @@ jobs:
           rm -f sonar-project.properties  # Ensure no sonar-project.properties file exists
       - name: Run tests with coverage
         run: |
-          dotnet test --collect:"XPlat Code Coverage"  # Run tests and collect coverage
+          dotnet test sem5pi/MDR/sem5pi-24-25-g034.sln --collect:"XPlat Code Coverage"  # Run tests and collect coverage
       - name: Run SonarScanner analysis for .NET
         run: |
           dotnet sonarscanner begin /k:"ruivieira03_Projeto-Estagio-Teste" /o:"ruivieira03" /d:sonar.token="${{ secrets.SONAR_TOKEN }}" /d:sonar.host.url="https://sonarcloud.io" /d:sonar.cs.vstest.reportsPaths="**/TestResults/*.xml" /d:sonar.coverageReportPaths="**/coverage.cobertura.xml"
