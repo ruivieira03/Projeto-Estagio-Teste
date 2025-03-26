@@ -30,12 +30,9 @@ jobs:
       - name: Install dependencies
         working-directory: sem5pi/SPA
         run: npm install
-      - name: Install testing dependencies
-        working-directory: sem5pi/SPA
-        run: yarn
       - name: Test and coverage
         working-directory: sem5pi/SPA
-        run: yarn jest --coverage
+        run: npm test
 
       - name: SonarQube Scan (JS)
         uses: SonarSource/sonarqube-scan-action@v5
