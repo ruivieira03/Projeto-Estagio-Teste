@@ -41,11 +41,11 @@ jobs:
           dotnet sonarscanner begin /k:"ruivieira03_Projeto-Estagio-Teste" /o:"ruivieira03" \
             /d:sonar.token="${{ secrets.SONAR_TOKEN }}" \
             /d:sonar.host.url="https://sonarcloud.io" \
-            /d:sonar.cs.vscoveragexml.reportsPaths="sem5pi/MDR/TestResults/coverage.cobertura.xml"
+            /d:sonar.cs.vscoveragexml.reportsPaths="sem5pi/MDR/coverage.xml"
           dotnet build sem5pi/MDR/sem5pi-24-25-g034.sln --no-incremental
           dotnet-coverage collect "dotnet test" -f xml -o "coverage.xml"
           reportgenerator \
-            -reports:sem5pi/MDR/coverage/coverage.cobertura.xml \
+            -reports:sem5pi/MDR/coverage.xml \
             -targetdir:coverage-report \
             -reporttypes:Cobertura
           dotnet sonarscanner end /d:sonar.token="${{ secrets.SONAR_TOKEN }}"
