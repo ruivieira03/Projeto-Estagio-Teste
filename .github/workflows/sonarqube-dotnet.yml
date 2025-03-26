@@ -46,9 +46,9 @@ jobs:
           dotnet test sem5pi/MDR/sem5pi-24-25-g034.sln \
             /p:CollectCoverage=true \
             /p:CoverletOutputFormat=cobertura \
-            /p:CoverletOutput=sem5pi/MDR/TestResults/coverage.cobertura.xml
+            /p:CoverletOutput=sem5pi/MDR/TestResults/coverage/
           reportgenerator \
-            -reports:sem5pi/MDR/TestResults/coverage.cobertura.xml \
+            -reports:sem5pi/MDR/TestResults/coverage/coverage.cobertura.xml \
             -targetdir:coverage-report \
             -reporttypes:Cobertura
           dotnet sonarscanner end /d:sonar.token="${{ secrets.SONAR_TOKEN }}"
