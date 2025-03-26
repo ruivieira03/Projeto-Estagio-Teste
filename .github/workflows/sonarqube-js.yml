@@ -27,9 +27,12 @@ jobs:
         uses: actions/setup-node@v3
         with:
           node-version: '20'
-      - name: Install dependencies
+      - name: Reinstall dependencies
         working-directory: sem5pi/SPA
-        run: npm install
+        run: |
+          rm -rf node_modules package-lock.json
+          npm install
+
       - name: Test and coverage
         working-directory: sem5pi/SPA
         run: npm test
