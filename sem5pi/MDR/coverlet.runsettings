@@ -2,10 +2,14 @@
 <RunSettings>
   <DataCollectionRunSettings>
     <DataCollectors>
-      <DataCollector friendlyName="XPlat Code Coverage">
+      <DataCollector friendlyName="Code Coverage">
         <Configuration>
-          <Format>cobertura</Format>
-          <ExcludeByAttribute>Obsolete,GeneratedCodeAttribute</ExcludeByAttribute>
+          <CodeCoverage>
+            <EnableUserCode>true</EnableUserCode>
+            <IncludeTestAssembly>true</IncludeTestAssembly>
+            <ExcludeAttributes>Obsolete,GeneratedCode</ExcludeAttributes>
+            <UseSourceLinks>true</UseSourceLinks>
+          </CodeCoverage>
         </Configuration>
       </DataCollector>
     </DataCollectors>
