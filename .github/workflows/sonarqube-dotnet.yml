@@ -41,8 +41,8 @@ jobs:
         run: |
           dotnet tool install --global dotnet-coverage
       - name: Run SonarScanner analysis with test coverage
+        working-directory: sem5pi/MDR
         run: |
-          working-directory: sem5pi/MDR
           dotnet sonarscanner begin /k:"ruivieira03_Projeto-Estagio-Teste" /o:"ruivieira03" \
             /d:sonar.token="${{ secrets.SONAR_TOKEN }}" \
             /d:sonar.host.url="https://sonarcloud.io" \
