@@ -38,8 +38,13 @@ jobs:
       - name: Remove sonar-project.properties for .NET analysis
         run: |
           rm -f sonar-project.properties
-      - name: Run SonarScanner analysis for .NET
+      - name: Run SonarScanner analysis with test coverage
         run: |
-          dotnet sonarscanner begin /k:"ruivieira03_Projeto-Estagio-Teste" /o:"ruivieira03" /d:sonar.token="${{ secrets.SONAR_TOKEN }}" /d:sonar.host.url="https://sonarcloud.io"
-          dotnet build sem5pi/MDR/sem5pi-24-25-g034.sln
+          dotnet sonarscanner begin /k:"ruivieira03_Projeto-Estagio-Teste" /o:"ruivieira03" \
+            /d:sonar.token="${{ secrets.SONAR_TOKEN }}" \
+            /d:sonar.host.url="https://sonarcloud.io" \
+            /d:sonar.cs.vscoveragexml.reportsPaths="coverage.xml"
+          dotnet build sem5pi/MDR/sem5pi-24-25-g034.sln --no-incremental
+          dotnet test sem5pi/MDR/sem5pi-24-25-g034.sln --collect "Code Coverage" --settings sem5pi/MDR/coverlet.runsettings
+          reportgenerator -reports:"**/coverage.cobertura.xml" -targetdir:"coverage-report" -reporttypes:Cobertura
           dotnet sonarscanner end /d:sonar.token="${{ secrets.SONAR_TOKEN }}"
