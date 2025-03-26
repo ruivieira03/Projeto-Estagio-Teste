@@ -31,13 +31,9 @@ jobs:
       - name: Install .NET SDK
         uses: actions/setup-dotnet@v2
         with:
-          dotnet-version: '7.x'
+          dotnet-version: '8.x'
       - name: Install SonarScanner tool
-        run: |
-          dotnet tool install --global dotnet-sonarscanner
-      - name: Remove sonar-project.properties for .NET analysis
-        run: |
-          rm -f sonar-project.properties
+        run: dotnet tool install --global dotnet-sonarscanner
       - name: Install ReportGenerator
         run: dotnet tool install --global dotnet-reportgenerator-globaltool
       - name: Run SonarScanner analysis with test coverage
@@ -45,8 +41,14 @@ jobs:
           dotnet sonarscanner begin /k:"ruivieira03_Projeto-Estagio-Teste" /o:"ruivieira03" \
             /d:sonar.token="${{ secrets.SONAR_TOKEN }}" \
             /d:sonar.host.url="https://sonarcloud.io" \
-            /d:sonar.cs.vscoveragexml.reportsPaths="coverage.xml"
+            /d:sonar.cs.vscoveragexml.reportsPaths="sem5pi/MDR/TestResults/coverage.cobertura.xml"
           dotnet build sem5pi/MDR/sem5pi-24-25-g034.sln --no-incremental
-          dotnet test sem5pi/MDR/sem5pi-24-25-g034.sln --collect "Code Coverage" --settings sem5pi/MDR/coverlet.runsettings
-          reportgenerator -reports:"**/coverage.cobertura.xml" -targetdir:"coverage-report" -reporttypes:Cobertura
+          dotnet test sem5pi/MDR/sem5pi-24-25-g034.sln \
+            /p:CollectCoverage=true \
+            /p:CoverletOutputFormat=cobertura \
+            /p:CoverletOutput=sem5pi/MDR/TestResults/coverage.cobertura.xml
+          reportgenerator \
+            -reports:sem5pi/MDR/TestResults/coverage.cobertura.xml \
+            -targetdir:coverage-report \
+            -reporttypes:Cobertura
           dotnet sonarscanner end /d:sonar.token="${{ secrets.SONAR_TOKEN }}"
