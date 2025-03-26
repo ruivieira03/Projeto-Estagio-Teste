@@ -38,6 +38,8 @@ jobs:
       - name: Remove sonar-project.properties for .NET analysis
         run: |
           rm -f sonar-project.properties
+      - name: Install ReportGenerator
+        run: dotnet tool install --global dotnet-reportgenerator-globaltool
       - name: Run SonarScanner analysis with test coverage
         run: |
           dotnet sonarscanner begin /k:"ruivieira03_Projeto-Estagio-Teste" /o:"ruivieira03" \
