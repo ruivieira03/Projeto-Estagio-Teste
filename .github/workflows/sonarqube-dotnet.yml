@@ -35,7 +35,10 @@ jobs:
       - name: Install SonarScanner tool
         run: dotnet tool install --global dotnet-sonarscanner
       - name: Install ReportGenerator
-        run: dotnet tool install --global dotnet-reportgenerator-globaltool
+        run: |
+          dotnet tool install --global dotnet-reportgenerator-globaltool
+          # Adicionar as ferramentas do .NET ao PATH
+          echo "$HOME/.dotnet/tools" >> $GITHUB_PATH
       - name: Run SonarScanner analysis with test coverage
         run: |
           dotnet sonarscanner begin /k:"ruivieira03_Projeto-Estagio-Teste" /o:"ruivieira03" \
