@@ -39,7 +39,8 @@ jobs:
         working-directory: sem5pi/SPA
         run: |
           # Run Jest tests with coverage flag to generate LCOV report
-          npm test -- --coverage --coverageReporters=text-lcov > coverage.lcov
+          npm test -- --coverage --coverageReporters=text-lcov > coverage.lcov # Analysis since last commit
+        # npm test -- --coverage --coverageReporters=text-lcov --watchAll=false --runInBand > coverage.lcov #Complete analysis
 
       - name: SonarQube Scan (JS)
         uses: SonarSource/sonarqube-scan-action@v5
