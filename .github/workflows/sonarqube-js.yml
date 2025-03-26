@@ -30,12 +30,12 @@ jobs:
       - name: Reinstall dependencies
         working-directory: sem5pi/SPA
         run: |
-          rm -rf node_modules package-lock.json
           npm install
+          npm install react-router-dom@6.28.0
 
       - name: Test and coverage
         working-directory: sem5pi/SPA
-        run: npm test
+        run: npm test -- --coverage
 
       - name: SonarQube Scan (JS)
         uses: SonarSource/sonarqube-scan-action@v5
